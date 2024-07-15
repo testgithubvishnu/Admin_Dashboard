@@ -26,19 +26,23 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-//userSchema.methods.generateToken = async ()= {
-// try{
-// return JWT.sign({
-//   userId:this._id.toString(),
-//   email:this.email,
-//   isAdmin:this.isAdmin,
-// },
-// process.env.JW);
-// }catch(err)
-// {
-//   console.error(err);
-// }
-//  };
+userSchema.methods.generateToken = async function () {
+  try {
+    return JWT.sign(
+      {
+        userId: this._id.toString(),
+        email: this.email,
+        isAdmin: this.isAdmin,
+      },
+      process.env.JWT_SECRET_KEY,
+      {
+        expiresIn: "30d",
+      }
+    );
+  } catch (err) {
+    console.error(err);
+  }
+};
 
 const User = new mongoose.model("User", userSchema);
 

@@ -6,6 +6,7 @@ const home = async (req, res) => {
     await res.status(200).send("welcome my app");
   } catch (err) {
     console.error(err);
+    next(err);
   }
 };
 
@@ -34,51 +35,46 @@ const register = async (req, res) => {
       phone,
       password: hashPassword,
     });
-    console.log(`User created: ${user}`);
 
     if (user) {
-      res
-        .status(200)
-        .json({
-          _id: user.id,
-          email: user.email,
-          token: await user.genearateToken(),
-        });
+      res.status(200).json({
+        msg: "User created successfully",
+        userId: user._id.toString(),
+        token: await user.generateToken(),
+      });
     } else {
       res.status(404).send("user data is not valid");
     }
   } catch (err) {
-    console.log(err);
+    next(err);
   }
 };
 
 const loginUser = async (req, res) => {
   try {
-    const { email, password } = await req.body;
+    const { email, password } = req.body;
     if (!email || !password) {
       res.status(400).send("All fields are required");
     }
     const user = await User.findOne({ email });
 
+    //if user exists:
     //compare password:
     if (user && (await bcrypt.compare(password, user.password))) {
-      const accessToken = await JWT.sign(
-        {
-          user: {
-            username: user.username,
-            email: user.email,
-            id: user.id,
-          },
-        },
-        "admin123",
-        { expiresIn: "20m" }
-      );
+      res.status(200).json({
+        msg: "Login successfully",
+        userId: user._id.toString(),
+        token: await user.generateToken(),
+      });
       await res.status(200).json({ accessToken });
-    } else {
-      await res.status(400).send("email or password is not valid");
+    }
+    //if user not exist:
+    else {
+      return res.status(400).json({ message: "Invalid Credentials" });
     }
   } catch (err) {
     console.log(err);
+    next(err);
   }
 };
 
