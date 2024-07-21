@@ -1,10 +1,19 @@
 require("dotenv").config();
+const cors = require("cors");
 const express = require("express");
 const app = express();
 const authRouter = require("./router/auth-router");
 const contactRouter = require("./router/contact-route");
 const connectDB = require("./utils/db");
 const errorMiddleware = require("./middlewares/error-middleware");
+
+//Tackle cors :
+const corsOptions = {
+  origin: "http://localhost:5173",
+  methods: "GET , POST, PUT, DELETE, PATCH,HEAD",
+  credentials: true,
+};
+app.use(cors(corsOptions));
 //const URI = process.env.Mongodb_URI;
 //mongoose.connect(URI);
 

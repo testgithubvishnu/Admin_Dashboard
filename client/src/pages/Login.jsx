@@ -1,9 +1,15 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const URL = "http://localhost:5000/api/auth/login";
 export const Login = () => {
   const [user, setUser] = useState({
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
   const handleInput = (e) => {
     let name = e.target.name;
     let value = e.target.value;
@@ -12,10 +18,37 @@ export const Login = () => {
       [name]: value,
     });
   };
+  const success = () => {
+    toast.success("login success", {
+      position: "top-center",
+    });
+  };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(e);
+    console.log(user);
+    try {
+      const response = await fetch(URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      });
+
+      console.log("login form", response);
+
+      if (response.ok) {
+        alert("Login success");
+        setUser({ email: "", password: "" });
+        navigate("/");
+      } else {
+        alert("Invalid username or password");
+        toast.alert("login error");
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
   return (
     <>
@@ -30,7 +63,7 @@ export const Login = () => {
                 <h1 className="main-heading mb-3">Login from</h1>
                 <br />
 
-                <form action={handleSubmit}>
+                <form onSubmit={handleSubmit}>
                   <div>
                     <label htmlFor="email">email</label>
                     <input
@@ -68,6 +101,7 @@ export const Login = () => {
           </div>
         </main>
       </section>
+      <ToastContainer />
     </>
   );
 };

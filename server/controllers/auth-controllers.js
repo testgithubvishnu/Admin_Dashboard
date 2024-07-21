@@ -46,7 +46,8 @@ const register = async (req, res) => {
       res.status(404).send("user data is not valid");
     }
   } catch (err) {
-    next(err);
+    console.log(err);
+    //next(err);
   }
 };
 
@@ -63,18 +64,16 @@ const loginUser = async (req, res) => {
     if (user && (await bcrypt.compare(password, user.password))) {
       res.status(200).json({
         msg: "Login successfully",
-        userId: user._id.toString(),
         token: await user.generateToken(),
+        userId: userExist._id.toString(),
       });
-      await res.status(200).json({ accessToken });
     }
     //if user not exist:
     else {
-      return res.status(400).json({ message: "Invalid Credentials" });
+      return res.status(401).json({ message: "Invalid Credentials" });
     }
   } catch (err) {
-    console.log(err);
-    next(err);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 

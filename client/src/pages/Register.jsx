@@ -1,4 +1,9 @@
+import { ToastContainer, toast } from "react-toastify";
+import { Navigate, useNavigate } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
+
+const URL = "http://localhost:5000/api/auth/register";
 export const Register = () => {
   const [user, setUser] = useState({
     username: "",
@@ -6,9 +11,9 @@ export const Register = () => {
     phone: "",
     password: "",
   });
+  const navigate = useNavigate();
 
   const handleInput = (e) => {
-    console.log(e);
     let name = e.target.name;
     let value = e.target.value;
 
@@ -20,19 +25,27 @@ export const Register = () => {
   // handle the form data
   const handleSubmit = async (e) => {
     e.preventDefault();
-    alert(e);
-    console.log(user);
+    // console.log(user);
     try {
-      const response = await fetch("http://localhost:5000/api/auth/register", {
+      const response = await fetch(URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(),
+        body: JSON.stringify(user),
       });
+      console.log("register form", response);
+
+      if (response.ok) {
+        const res_data = resonse.json();
+        console.log("res from server", res_data);
+        setUser({ username: "", email: "", phone: "", password: "" });
+        navigate("/login");
+        //alert("registration success");
+      }
       console.log(response);
     } catch (err) {
-      console.error(err);
+      console.log("register error", err);
     }
   };
 
@@ -41,7 +54,7 @@ export const Register = () => {
       <section>
         <main>
           <div className="section-registration">
-            <div className="container grid grid-two-cols">
+            <div className="container grid  grid-two-cols">
               <div className="registration-image">
                 <img src="" alt="registration" width=" " height="" />
               </div>
@@ -106,7 +119,11 @@ export const Register = () => {
                     />
                   </div>
                   <br />
-                  <button type="submit" className="btn btn-submit">
+                  <button
+                    type="submit"
+                    className="btn btn-submit"
+                    onClick={success}
+                  >
                     Register Now
                   </button>
                 </form>
@@ -115,6 +132,7 @@ export const Register = () => {
           </div>
         </main>
       </section>
+      <ToastContainer />
     </>
   );
 };
