@@ -37,7 +37,7 @@ export const Register = () => {
       console.log("register form", response);
 
       if (response.ok) {
-        const res_data = resonse.json();
+        const res_data = response.json();
         console.log("res from server", res_data);
         setUser({ username: "", email: "", phone: "", password: "" });
         navigate("/login");
@@ -122,7 +122,7 @@ export const Register = () => {
                   <button
                     type="submit"
                     className="btn btn-submit"
-                    onClick={success}
+                    onClick={handleSubmit}
                   >
                     Register Now
                   </button>

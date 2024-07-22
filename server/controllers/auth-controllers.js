@@ -53,7 +53,7 @@ const register = async (req, res) => {
 
 const loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = await req.body;
     if (!email || !password) {
       res.status(400).send("All fields are required");
     }
@@ -65,7 +65,7 @@ const loginUser = async (req, res) => {
       res.status(200).json({
         msg: "Login successfully",
         token: await user.generateToken(),
-        userId: userExist._id.toString(),
+        userId: user._id.toString(),
       });
     }
     //if user not exist:
