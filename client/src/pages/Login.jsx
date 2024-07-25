@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../store/Auth";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -9,18 +10,16 @@ export const Login = () => {
     email: "",
     password: "",
   });
+
   const navigate = useNavigate();
+  const { storeTokenInLS } = useAuth();
+
   const handleInput = (e) => {
     let name = e.target.name;
     let value = e.target.value;
     setUser({
       ...user,
       [name]: value,
-    });
-  };
-  const success = () => {
-    toast.success("login success", {
-      position: "top-center",
     });
   };
 
@@ -40,11 +39,14 @@ export const Login = () => {
 
       if (response.ok) {
         alert("Login success");
+        const res_data = await response.json();
+        //localStorage.setItem("token", res_data.token);
+        storeTokenInLS(res_data.token);
+
         setUser({ email: "", password: "" });
         navigate("/");
       } else {
         alert("Invalid username or password");
-        toast.alert("login error");
       }
     } catch (err) {
       console.log(err);

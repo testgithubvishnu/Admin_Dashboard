@@ -1,7 +1,8 @@
 import { ToastContainer, toast } from "react-toastify";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
+import { useAuth } from "../store/Auth";
 
 const URL = "http://localhost:5000/api/auth/register";
 export const Register = () => {
@@ -11,7 +12,9 @@ export const Register = () => {
     phone: "",
     password: "",
   });
+
   const navigate = useNavigate();
+  const { storeTokenInLS } = useAuth();
 
   const handleInput = (e) => {
     let name = e.target.name;
@@ -37,8 +40,11 @@ export const Register = () => {
       console.log("register form", response);
 
       if (response.ok) {
-        const res_data = response.json();
+        const res_data = await response.json();
         console.log("res from server", res_data);
+        //localStorage.setItem("token", res_data.token);
+        storeTokenInLS(res_data.token);
+
         setUser({ username: "", email: "", phone: "", password: "" });
         navigate("/login");
         //alert("registration success");

@@ -311,6 +311,36 @@ a.active {
     margin-top: 3.2rem;
   }
 
+  /* // Login: */
+  .section-Login {
+    padding: 0 3.2rem;
+  
+  }
+  
+  .section-Login .container {
+      /* background-color: #fff; */
+      padding-top: 3.2rem;
+      align-items: center;
+       
+    }
+    .section-Login .container  img {
+      width: 80%;
+      height: auto;
+    }
+    .section-Login .Login-form label {
+      display: block;
+      margin: 2.4rem 0 0.8rem 0;
+      text-transform: capitalize;
+    }
+    .section-Login .Login-form input {
+      width: 80%;
+      padding: 0.6rem 0.6rem;
+    }
+    .section-Login .Login-form button {
+      margin-top: 3.2rem;
+    }
+  
+
 .adminNav ul {
   display: flex;
   flex-direction: column;
