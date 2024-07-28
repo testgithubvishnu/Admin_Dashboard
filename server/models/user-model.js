@@ -27,6 +27,7 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 userSchema.methods.generateToken = async function () {
+  console.log(" I am Token");
   try {
     return JWT.sign(
       {
@@ -34,13 +35,13 @@ userSchema.methods.generateToken = async function () {
         email: this.email,
         isAdmin: this.isAdmin,
       },
-      process.env.JWT_SECRET_KEY,
+      "pass123",
       {
         expiresIn: "30d",
       }
     );
   } catch (err) {
-    console.error(err);
+    console.error("Token error", err);
   }
 };
 

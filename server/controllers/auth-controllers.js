@@ -20,7 +20,7 @@ const register = async (req, res) => {
     }
 
     //Already exists fields:
-    const userExist = await User.findOne({ email });
+    const userExist = await User.findOne({ email: email });
     if (userExist) {
       return res.status(400).json({ msg: "email already exists" });
     }
@@ -77,4 +77,15 @@ const loginUser = async (req, res) => {
   }
 };
 
-module.exports = { home, register, loginUser };
+// Send user data - user logic
+const user = async (req, res) => {
+  try {
+    const userData = await req.user;
+    console.log(userData);
+    return res.status(200).json({ userData });
+  } catch (error) {
+    console.log(`error from the user route ${error}`);
+  }
+};
+
+module.exports = { home, register, loginUser, user };

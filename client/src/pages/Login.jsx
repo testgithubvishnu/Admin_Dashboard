@@ -11,8 +11,8 @@ export const Login = () => {
     password: "",
   });
 
-  const navigate = useNavigate();
   const { storeTokenInLS } = useAuth();
+  const navigate = useNavigate();
 
   const handleInput = (e) => {
     let name = e.target.name;
@@ -35,12 +35,13 @@ export const Login = () => {
         body: JSON.stringify(user),
       });
 
-      console.log("login form", response);
+      // console.log("login form", response);
 
       if (response.ok) {
         alert("Login success");
         const res_data = await response.json();
-        //localStorage.setItem("token", res_data.token);
+        console.log("login form", res_data);
+
         storeTokenInLS(res_data.token);
 
         setUser({ email: "", password: "" });
