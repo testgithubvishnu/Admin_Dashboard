@@ -5,6 +5,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState("");
   const [user, setUser] = useState("");
+  const [services, setService] = useState("");
 
   const storeTokenInLS = (servertoken) => {
     setToken(servertoken);
@@ -21,6 +22,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const URL = "http://localhost:5000/api/auth/user";
+
   // To get currntly LoggedIn data:
   const userAuthentication = async () => {
     try {
@@ -40,13 +42,29 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // To get the services:
+  const getServices = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/data/services", {
+        method: "GET",
+      });
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        setService(data);
+      }
+    } catch (err) {
+      console.log(`services frontend error:${err}`);
+    }
+  };
+
   useEffect(() => {
-    userAuthentication();
+    getServices(), userAuthentication();
   }, []);
 
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn, storeTokenInLS, LogoutUser, user }}
+      value={{ isLoggedIn, storeTokenInLS, LogoutUser, user, services }}
     >
       {children}
     </AuthContext.Provider>

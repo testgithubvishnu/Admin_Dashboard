@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 userSchema.methods.generateToken = async function () {
-  console.log(" I am Token");
+  // console.log(" I am Token");
   try {
     return JWT.sign(
       {

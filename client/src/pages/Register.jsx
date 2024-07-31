@@ -37,19 +37,19 @@ export const Register = () => {
         },
         body: JSON.stringify(user),
       });
-      console.log("register form", response);
+
+      const res_data = await response.json();
+      console.log("res from server", res_data);
 
       if (response.ok) {
-        const res_data = await response.json();
-        console.log("res from server", res_data);
         //localStorage.setItem("token", res_data.token);
         storeTokenInLS(res_data.token);
-
         setUser({ username: "", email: "", phone: "", password: "" });
         navigate("/login");
         //alert("registration success");
+      } else {
+        alert("Not a valid registration!");
       }
-      console.log(response);
     } catch (err) {
       console.log("register error", err);
     }
