@@ -35,19 +35,18 @@ export const Login = () => {
         body: JSON.stringify(user),
       });
 
-      // console.log("login form", response);
+      console.log("login form", response);
+      const res_data = await response.json();
 
       if (response.ok) {
         alert("Login success");
-        const res_data = await response.json();
-        console.log("login form", res_data);
-
         storeTokenInLS(res_data.token);
 
         setUser({ email: "", password: "" });
         navigate("/");
       } else {
-        alert("Invalid username or password");
+        toast(res_data.extraDetails ? res_data.extraDetails : res_data.message);
+        console.log("Invalid username or password");
       }
     } catch (err) {
       console.log(err);
